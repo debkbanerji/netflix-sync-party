@@ -2,7 +2,9 @@ function embeddedCode() {
   // Have to define constants in this function since it needs to be serialized
   // to be embedded
 
-  const TIME_BEFORE_RUN = 1000; // Give Netflix this much time to load
+  const MS_IN_SEC = 1000;
+
+  const TIME_BEFORE_RUN = 1 * MS_IN_SEC; // Give Netflix this much time to load
   // TODO: Do this reactively rather than guessing
 
   const SYNC_GMT_TIMESTAMP_PARAM = 'syncGMTTimestamp';
@@ -12,8 +14,6 @@ function embeddedCode() {
   const SYNC_VIDEO_NUM_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_VIDEO_TIMESTAMP_PARAM + "=\\d*");
 
   const GMT_URL = 'https://worldtimeapi.org/api/timezone/Europe/London';
-
-  const MS_IN_SEC = 1000;
 
   function getPlayer() {
     try {
@@ -33,7 +33,7 @@ function embeddedCode() {
 
       return player;
     } catch (err) {
-      alert("Netflix link sync unable to access player on page")
+      alert('Netflix link sync unable to access player on page');
       console.error(err);
     }
   }
@@ -67,17 +67,23 @@ function embeddedCode() {
         const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
 
         if (timeToVideoStartMs > 0) {
-          // video should not start yet - schedule the start
+          // video should not start yet - reset and schedule the start
+          player.seek(0);
+          player.pause();
           setTimeout(function() {
             player.play();
           }, timeToVideoStartMs);
-        } else if (false) {
-          // video is over
-          // TODO: Build UI to deal with this
         } else {
           // video should have started already - seek to the appropriate point
           player.seek(-1 * timeToVideoStartMs);
           player.play();
+
+          setTimeout(function() {
+            // wait a second, then alert the viewer if the video has already ended
+            if (player.isEnded()) {
+              alert('The scheduled video has ended');
+            }
+          }, 1 * MS_IN_SEC);
         }
 
       });
