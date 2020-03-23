@@ -7,10 +7,10 @@ function embeddedCode() {
   const TIME_BEFORE_RUN = 1 * MS_IN_SEC; // Give Netflix this much time to load
   // TODO: Do this reactively rather than guessing
 
-  const SYNC_GMT_TIMESTAMP_PARAM = 'syncGMTTimestamp';
+  const SYNC_GMT_TIMESTAMP_PARAM = 'syncGMTTimestampSec';
   const SYNC_GMT_NUM_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_GMT_TIMESTAMP_PARAM + "=\\d*");
 
-  const SYNC_VIDEO_TIMESTAMP_PARAM = 'syncVideoTimestamp';
+  const SYNC_VIDEO_TIMESTAMP_PARAM = 'syncVideoTimestampSec';
   const SYNC_VIDEO_NUM_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_VIDEO_TIMESTAMP_PARAM + "=\\d*");
 
   const GMT_URL = 'https://worldtimeapi.org/api/timezone/Europe/London';
@@ -106,14 +106,14 @@ function embedInPage(fn) {
 
 // Define these ones here as well since we need to use these to check whether
 // or not we need to embed code in the first place
-const SYNC_GMT_TIMESTAMP_PARAM = 'syncGMTTimestamp';
+const SYNC_GMT_TIMESTAMP_PARAM = 'syncGMTTimestampSec';
 const SYNC_GMT_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_GMT_TIMESTAMP_PARAM + "=([^&#]*)");
 
 const url = window.location.href;
 
 // Only embed the code in the page if at least the GMT timestamp exists
-// Ex 1: https://www.netflix.com/watch/70079583?syncGMTTimestamp=1584939579?syncVideoTimestamp=1091243
-// Ex 2: https://www.netflix.com/watch/70079583?syncGMTTimestamp=1584939579
+// Ex 1: https://www.netflix.com/watch/70079583?syncGMTTimestampSec=1584939579?syncVideoTimestampSec=1091243
+// Ex 2: https://www.netflix.com/watch/70079583?syncGMTTimestampSec=1584939579
 if (SYNC_GMT_TIMESTAMP_REGEX.test(url)) {
   embedInPage(embeddedCode);
 }
