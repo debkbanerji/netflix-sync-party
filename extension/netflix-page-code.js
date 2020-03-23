@@ -112,7 +112,7 @@ const SYNC_GMT_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_GMT_TIMESTAMP_PARAM 
 const url = window.location.href;
 
 // Only embed the code in the page if at least the GMT timestamp exists
-// Ex 1: https://www.netflix.com/watch/70079583?syncGMTTimestampSec=1584939579?syncVideoTimestampSec=1091243
+// Ex 1: https://www.netflix.com/watch/70079583?syncGMTTimestampSec=1584939579?syncVideoTimestampSec=1200
 // Ex 2: https://www.netflix.com/watch/70079583?syncGMTTimestampSec=1584939579
 if (SYNC_GMT_TIMESTAMP_REGEX.test(url)) {
   embedInPage(embeddedCode);
