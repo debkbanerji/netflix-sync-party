@@ -63,18 +63,21 @@ function embeddedCode() {
         const currentGMTTs = data.unixtime;
 
         // time between now and when the video should start
-        const timeToVideoStart = syncGMTTs - currentGMTTs + syncVideoTargetTs;
+        const timeToVideoStartSec = syncGMTTs - currentGMTTs + syncVideoTargetTs;
+        const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
 
-        console.log(timeToVideoStart);
-        if (timeToVideoStart > 0) {
+        if (timeToVideoStartMs > 0) {
           // video should not start yet - schedule the start
-
+          setTimeout(function() {
+            player.play();
+          }, timeToVideoStartMs);
         } else if (false) {
           // video is over
           // TODO: Build UI to deal with this
         } else {
           // video should have started already - seek to the appropriate point
-          player.seek(-1 * timeToVideoStart * MS_IN_SEC);
+          player.seek(-1 * timeToVideoStartMs);
+          player.play();
         }
 
       });
@@ -83,12 +86,6 @@ function embeddedCode() {
   setTimeout(function() {
     onNetflixLoad();
   }, TIME_BEFORE_RUN);
-
-  // setTimeout(function() {
-  //   player.pause();
-  //   player.seek(1091243) //seek to roughly 18mins
-  //   // player.play();
-  // }, TIME_BEFORE_RUN * 3);
 
 }
 
