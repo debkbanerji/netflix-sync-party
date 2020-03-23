@@ -1,41 +1,67 @@
-const syncStates = {
-  UNINITIALIZED: 'uninitialized',
-  WAITING_FOR_START: 'waiting_for_start',
-  STARTED: 'started'
+function embeddedCode() {
+  const syncStates = {
+    UNINITIALIZED: 'uninitialized',
+    WAITING_FOR_START: 'waiting_for_start',
+    STARTED: 'started'
+  }
+
+  const TIME_BEFORE_RUN = 1000; // Give Netflix this much time to load
+  // TODO: Do this reactively rather than guessing
+
+  function getPlayer() {
+    try {
+      const videoPlayer = netflix
+        .appContext
+        .state
+        .playerApp
+        .getAPI()
+        .videoPlayer
+
+      // Getting player id
+      const playerSessionId = videoPlayer
+        .getAllPlayerSessionIds()[0]
+
+      const player = videoPlayer
+        .getVideoPlayerBySessionId(playerSessionId)
+
+      return player
+    } catch(err) {
+      alert("Netflix link sync unable to access player on page")
+      console.error(err);
+    }
+  }
+
+  function onNetflixLoad() {
+    let state = syncStates.UNINITIALIZED;
+
+    const videoPlayer = getPlayer();
+
+    while (state !== syncStates.STARTED) {
+      state = syncStates.STARTED; // escape
+    }
+    // the video has started - don't do anything else right now
+  }
+
+  setTimeout(function() {
+    onNetflixLoad();
+  }, TIME_BEFORE_RUN);
+
+  setTimeout(function() {
+    const player = getPlayer();
+    player.pause();
+    console.log(player)
+    player.seek(1091243) //seek to roughly 18mins
+    // player.play();
+  }, TIME_BEFORE_RUN * 3);
+
 }
 
-function getNetflixVideoPlayerElement() {
-  const videoElements = document.getElementsByTagName("video");
 
-  if (videoElements.length < 1) {
-    throw "Video player element not found";
-  }
-  if (videoElements.length > 1) {
-    console.warn("Multiple video players found - guessing that the first one found is the main one")
-  }
-  return videoElements[0];
+// Required so we can access the Netflix player and other page elements
+function embedInPage(fn) {
+  const script = document.createElement("script");
+  script.text = `(${fn.toString()})();`;
+  document.documentElement.appendChild(script);
 }
 
-function onNetflixLoad() {
-  let state = syncStates.UNINITIALIZED;
-
-  const videoPlayer = getNetflixVideoPlayerElement();
-
-  while (state !== syncStates.STARTED) {
-    state = syncStates.STARTED; // escape
-  }
-  // the video has started - don't do anything else right now
-}
-
-
-const TIME_BEFORE_RUN = 2000; // Give Netflix this much time to load
-// TODO: Do this reactively rather than guessing
-
-setTimeout(function() {
-  onNetflixLoad();
-}, TIME_BEFORE_RUN);
-
-setTimeout(function() {
-  const media = getNetflixVideoPlayerElement();
-  media.pause();
-}, TIME_BEFORE_RUN * 3);
+embedInPage(embeddedCode);
