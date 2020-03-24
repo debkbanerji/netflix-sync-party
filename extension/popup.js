@@ -1,10 +1,12 @@
 function runOnNetflixTab(tab) {
-  const NETFLIX_WATCH_REGEX = /netflix\.com\/watch\/\d*/gi
-  const WATCH_TRACK_REGEX = /watch\/\d*/gi
-  const TRACK_ID_REGEX = /\d.*/gi
-  const GMT_TIMESTAMP_REGEX = /\d.*/gi
+  const NETFLIX_WATCH_REGEX = /netflix\.com\/watch\/\d*/gi;
+  const WATCH_TRACK_REGEX = /watch\/\d*/gi;
+  const TRACK_ID_REGEX = /\d.*/gi;
+  const GMT_TIMESTAMP_REGEX = /\d.*/gi;
   const SYNC_GMT_TIMESTAMP_PARAM = 'syncGMTTimestampSec';
   const SYNC_GMT_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_GMT_TIMESTAMP_PARAM + "=([^&#]*)");
+
+  const EXTENSION_LINK = 'https://github.com/debkbanerji/netflix-sync-extension';
 
   const MS_IN_SEC = 1000;
 
@@ -36,6 +38,10 @@ function runOnNetflixTab(tab) {
       // get track ID
       const trackIDMatch = WATCH_TRACK_REGEX.exec(url)[0];
       const trackID = TRACK_ID_REGEX.exec(trackIDMatch)[0];
+
+      document.getElementById('copy-extension-link').addEventListener('click', () => {
+        navigator.clipboard.writeText(EXTENSION_LINK);
+      });
     }
   } else {
     document.getElementById('non-video-view').hidden = false;
