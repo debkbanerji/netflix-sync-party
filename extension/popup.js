@@ -6,7 +6,7 @@ function runOnNetflixTab(tab) {
   const SYNC_GMT_TIMESTAMP_PARAM = 'syncGMTTimestampSec';
   const SYNC_GMT_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_GMT_TIMESTAMP_PARAM + "=([^&#]*)");
 
-  const EXTENSION_LINK = 'https://github.com/debkbanerji/netflix-sync-extension';
+  const EXTENSION_LINK = 'https://github.com/debkbanerji/netflix-sync-extension/releases';
 
   const MS_IN_SEC = 1000;
 
