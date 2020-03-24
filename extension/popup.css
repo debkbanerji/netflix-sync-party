@@ -55,9 +55,7 @@ text-align: center;
 }
 
 button {
-  position: relative;
-  display: block;
-  margin: auto auto 20px auto;
+  margin: auto 10px 20px auto;
   padding: 12px 24px 12px 24px;
   overflow: hidden;
   border-width: 0;
