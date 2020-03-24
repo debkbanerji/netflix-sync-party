@@ -27,6 +27,10 @@ function runOnNetflixTab(tab) {
         chrome.tabs.reload(tab.id);
       });
 
+      document.getElementById('copy-url').addEventListener('click', () => {
+        navigator.clipboard.writeText(url);
+      });
+
       const timestampGMTMatch = SYNC_GMT_TIMESTAMP_REGEX.exec(url)[0];
       const timestampGMT = parseInt(GMT_TIMESTAMP_REGEX.exec(timestampGMTMatch)[0]) * MS_IN_SEC;
 
