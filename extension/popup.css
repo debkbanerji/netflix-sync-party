@@ -64,7 +64,7 @@ button {
   outline: none;
   border-radius: 2px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
-  background-color: #e50914;
+  background-color: #bd0710;
   transition: background-color .3s;
   cursor: pointer;
   color: #ecf0f1;
@@ -73,7 +73,7 @@ button {
 }
 
 button:hover, button:focus {
-  background-color: #bd0710;
+  background-color: #990710;
 }
 
 button>* {
