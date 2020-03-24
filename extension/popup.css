@@ -1,3 +1,14 @@
 body {
-  background-color: lightblue;
+  background-color: #141414;
+  color: white;
+  font-family: sans-serif;
+  white-space: nowrap;
+}
+
+h1 {
+  margin-top: 2px
+}
+
+h1, h2, h3 {
+  color: #e50914;
 }
