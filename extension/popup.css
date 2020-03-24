@@ -13,11 +13,21 @@ h1, h2, h3 {
   color: #e50914;
 }
 
+h1 {
+  margin-bottom: 12px
+}
+
 p {
   font-size: 16px;
+  margin-top: 8px;
 }
 
 #green-check {
-  font-size: 24px;
   color: #00C851;
+  font-size: 24px;
+}
+
+#viewing-scheduled-text {
+  color: #00C851;
+  font-weight: bold;
 }
