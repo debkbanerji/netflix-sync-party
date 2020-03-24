@@ -2,8 +2,11 @@ function runOnNetflixTab(tab) {
   const NETFLIX_WATCH_REGEX = /netflix\.com\/watch\/\d*/gi
   const WATCH_TRACK_REGEX = /watch\/\d*/gi
   const TRACK_ID_REGEX = /\d.*/gi
+  const GMT_TIMESTAMP_REGEX = /\d.*/gi
   const SYNC_GMT_TIMESTAMP_PARAM = 'syncGMTTimestampSec';
   const SYNC_GMT_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_GMT_TIMESTAMP_PARAM + "=([^&#]*)");
+
+  const MS_IN_SEC = 1000;
 
   const url = tab.url;
 
@@ -14,8 +17,6 @@ function runOnNetflixTab(tab) {
 
   let trackID = null;
 
-  console.log(url);
-
   if (NETFLIX_WATCH_REGEX.test(url)) {
     if (SYNC_GMT_TIMESTAMP_REGEX.test(url)) {
       document.getElementById('synced-video-view').hidden = false;
@@ -24,12 +25,17 @@ function runOnNetflixTab(tab) {
         chrome.tabs.reload(tab.id);
       });
 
+      const timestampGMTMatch = SYNC_GMT_TIMESTAMP_REGEX.exec(url)[0];
+      const timestampGMT = parseInt(GMT_TIMESTAMP_REGEX.exec(timestampGMTMatch)[0]) * MS_IN_SEC;
+
+      document.getElementById('scheduled-start-time-gmt').innerHTML = new Date(timestampGMT).toUTCString();;
+
     } else {
       document.getElementById('unsynced-video-view').hidden = false;
 
       // get track ID
-      const match = WATCH_TRACK_REGEX.exec(url)[0];
-      const trackID = TRACK_ID_REGEX.exec(match)[0];
+      const trackIDMatch = WATCH_TRACK_REGEX.exec(url)[0];
+      const trackID = TRACK_ID_REGEX.exec(trackIDMatch)[0];
     }
   } else {
     document.getElementById('non-video-view').hidden = false;
