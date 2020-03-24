@@ -7,6 +7,7 @@ body {
 
 h1 {
   margin-top: 2px;
+  font-weight: 400;
 }
 
 h1, h2, h3 {
@@ -14,7 +15,8 @@ h1, h2, h3 {
 }
 
 h1 {
-  margin-bottom: 12px
+  margin-bottom: 12px;
+  text-align: center;
 }
 
 p {
@@ -29,5 +31,75 @@ p {
 
 #viewing-scheduled-text {
   color: #00C851;
+  font-weight: 400;
+}
+
+
+button {
+  position: relative;
+
+  display: block;
+  margin: auto auto 20px auto;
+  padding: 12px 24px 12px 24px;
+
+  overflow: hidden;
+
+  border-width: 0;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+
+  background-color:  #e50914;
+
+  transition: background-color .3s;
+
+  cursor: pointer;
+
+  color: #ecf0f1;
+
   font-weight: bold;
+  font-size: 14px
+
+}
+
+button:hover, button:focus {
+  background-color:  #bd0710;
+}
+
+button > * {
+  position: relative;
+}
+
+button span {
+  display: block;
+  padding: 12px 24px;
+}
+
+button:before {
+  content: "";
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  display: block;
+  width: 0;
+  padding-top: 0;
+
+  border-radius: 100%;
+
+  background-color: rgba(236, 240, 241, .3);
+
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+button:active:before {
+  width: 120%;
+  padding-top: 120%;
+
+  transition: width .2s ease-out, padding-top .2s ease-out;
 }
