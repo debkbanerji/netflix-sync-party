@@ -4,8 +4,9 @@ function runOnNetflixTab(tab) {
   const TRACK_ID_REGEX = /\d.*/gi;
   const GMT_TIMESTAMP_REGEX = /\d.*/gi;
   const SYNC_GMT_TIMESTAMP_PARAM = 'syncGMTTimestampSec';
-  const SYNC_GMT_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_GMT_TIMESTAMP_PARAM + "=([^&#]*)");
+  const SYNC_GMT_TIMESTAMP_REGEX = new RegExp('[\\?&]' + SYNC_GMT_TIMESTAMP_PARAM + '=([^&#]*)');
 
+  const GMT_URL = 'http://worldclockapi.com/api/json/gmt/now';
   const EXTENSION_LINK = 'https://github.com/debkbanerji/netflix-sync-extension/releases';
 
   const MS_IN_SEC = 1000;
@@ -45,6 +46,26 @@ function runOnNetflixTab(tab) {
 
       document.getElementById('copy-extension-link').addEventListener('click', () => {
         navigator.clipboard.writeText(EXTENSION_LINK);
+      });
+
+      let targetGMTTs = null;
+
+      document.getElementById('time-selector-dropdown').addEventListener('change', () => {
+        const startTimeOffset = document.getElementById('time-selector-dropdown').value;
+
+        fetch(GMT_URL)
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            const startTimeOffset = document.getElementById('time-selector-dropdown').value
+            const targetGMTTs = Date.parse(data.currentDateTime) / MS_IN_SEC + parseInt(startTimeOffset);
+
+            document.getElementById('time-selector-dropdown').hidden = true;
+            document.getElementById('selected-start-time-gmt').hidden = false;
+            document.getElementById('selected-start-time-gmt').innerHTML = new Date(targetGMTTs*MS_IN_SEC).toUTCString();;
+
+          });
       });
     }
   } else {

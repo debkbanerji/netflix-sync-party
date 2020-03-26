@@ -54,6 +54,14 @@ text-align: center;
   font-size: 24px;
 }
 
+#start-time-select {
+  font-size: 16px;
+}
+
+select {
+  font-size: 16px;
+}
+
 button {
   margin: auto 10px 20px auto;
   padding: 12px 24px 12px 24px;

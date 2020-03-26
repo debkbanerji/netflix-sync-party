@@ -60,7 +60,7 @@ function embeddedCode() {
         return response.json();
       })
       .then((data) => {
-        const currentGMTTs = data.unixtime;
+        const currentGMTTs = Date.parse(data.currentDateTime) / MS_IN_SEC;
 
         // time between now and when the video should start
         const timeToVideoStartSec = syncGMTTs - currentGMTTs - syncVideoTargetTs;
