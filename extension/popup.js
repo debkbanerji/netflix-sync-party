@@ -63,8 +63,16 @@ function runOnNetflixTab(tab) {
 
             document.getElementById('time-selector-dropdown').hidden = true;
             document.getElementById('selected-start-time-gmt').hidden = false;
-            document.getElementById('selected-start-time-gmt').innerHTML = new Date(targetGMTTs*MS_IN_SEC).toUTCString();;
+            document.getElementById('selected-start-time-gmt').innerHTML = new Date(targetGMTTs * MS_IN_SEC).toUTCString();
 
+            const watchPartyLink = 'https://www.netflix.com/watch/' + trackID + '?syncGMTTimestampSec=' + targetGMTTs
+            document.getElementById('watch-party-link').innerHTML = watchPartyLink;
+            document.getElementById('watch-party-link').href = watchPartyLink;
+            document.getElementById('watch-party-link').addEventListener('click', () => {
+              chrome.tabs.update({
+                url: watchPartyLink
+              });
+            });
           });
       });
     }

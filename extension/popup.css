@@ -32,6 +32,7 @@ a {
   color: #2278da;
   font-weight: bold;
   padding-top: 20px;
+  cursor: pointer;
 }
 
 a:hover, a:focus {
