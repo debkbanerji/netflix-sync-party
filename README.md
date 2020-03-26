@@ -1,7 +1,7 @@
 # Netflix Sync Party
 Chrome extension to easily let you sync the start times of Netflix shows with your friends.
 
-No ads, no login.
+No ads, no queues, no login, no lag.
 Free and source.
 
 Made with ❤️ by Deb

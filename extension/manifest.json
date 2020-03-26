@@ -1,7 +1,7 @@
 {
   "name": "Netflix Sync Party",
   "version": "2019.3.25",
-  "description": "Watch Netflix with friends - no lag, no broken video, no nonsense",
+  "description": "Watch Netflix with friends - no ads, no queues, no login, no lag",
   "permissions": ["declarativeContent", "tabs"],
   "content_scripts": [{
     "matches": ["http://*.netflix.com/*", "https://*.netflix.com/*"],
