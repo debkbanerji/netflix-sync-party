@@ -58,8 +58,6 @@ function embeddedCode() {
     // time between now and when the video should start
     const timeToVideoStartSec = syncGMTTs - currentGMTTs - syncVideoTargetTs;
     const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
-    console.log(syncGMTTs)
-    console.log(currentGMTTs)
 
     if (timeToVideoStartMs > 0) {
       // video should not start yet - reset and schedule the start
