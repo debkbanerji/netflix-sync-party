@@ -1,7 +1,7 @@
 # Netflix Sync Party
 Chrome extension to easily let you sync the start times of Netflix shows with your friends.
 
-Free, open source, lightweight, no login, no nonsense.
+Free, open source, lightweight, no ads, no login, no nonsense.
 
 Made with ❤️ by Deb
 
@@ -15,9 +15,9 @@ Doesn't support video or text chat, since external services almost certainly do 
 
 This is useful if you want to mess with the code and add/remove features
 
-1. Download the latest release from the ![releases page](https://github.com/debkbanerji/netflix-sync-extension/releases)
+1. Download the latest release from the [releases page](https://github.com/debkbanerji/netflix-sync-extension/releases)
 2. Open the Extension Management page by navigating to `chrome://extensions`
-⋅⋅* The Extension Management page can also be opened by clicking on the Chrome menu, selecting **Settings** then selecting **Extensions**.
+    * The Extension Management page can also be opened by clicking on the Chrome menu, selecting **Settings** then selecting **Extensions**.
 3. Enable Developer Mode by clicking the toggle switch next to **Developer mode**.
 4. Click the **LOAD UNPACKED** button and select the `extension` directory within the release you downloaded.
 
