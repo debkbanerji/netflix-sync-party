@@ -4,7 +4,7 @@ function embeddedCode() {
 
   const MS_IN_SEC = 1000;
 
-  const TIME_BEFORE_RUN = 1 * MS_IN_SEC; // Give Netflix this much time to load
+  const TIME_BEFORE_RUN = 3 * MS_IN_SEC; // Give Netflix this much time to load
   // TODO: Do this reactively rather than guessing
 
   const SYNC_GMT_TIMESTAMP_PARAM = 'syncGMTTimestampSec';
@@ -54,49 +54,34 @@ function embeddedCode() {
 
     const player = getPlayer();
 
-    let fetchTimePromise = new Promise((resolve, reject) => {
-      resolve({
-        currentDateTime: (new Date(Date.now())).toUTCString()
-      });
-    });
+    const currentGMTTs = Date.now() / MS_IN_SEC;
+    // time between now and when the video should start
+    const timeToVideoStartSec = syncGMTTs - currentGMTTs - syncVideoTargetTs;
+    const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
+    console.log(syncGMTTs)
+    console.log(currentGMTTs)
 
-    if (USE_NETWORK_TIME) {
-      // Get the current time from the web to avoid issues with computers that
-      // have incorrectly set time
-      fetchTimePromise = fetch(GMT_URL)
-        .then((response) => {
-          return response.json();
-        });
-    }
-
-    fetchTimePromise.then((data) => {
-      const currentGMTTs = Date.parse(data.currentDateTime) / MS_IN_SEC;
-
-      // time between now and when the video should start
-      const timeToVideoStartSec = syncGMTTs - currentGMTTs - syncVideoTargetTs;
-      const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
-
-      if (timeToVideoStartMs > 0) {
-        // video should not start yet - reset and schedule the start
-        player.seek(0);
-        player.pause();
-        setTimeout(function() {
-          player.play();
-        }, timeToVideoStartMs);
-      } else {
-        // video should have started already - seek to the appropriate point
-        player.seek(-1 * timeToVideoStartMs);
+    if (timeToVideoStartMs > 0) {
+      // video should not start yet - reset and schedule the start
+      player.seek(0);
+      player.pause();
+      setTimeout(function() {
         player.play();
+      }, timeToVideoStartMs);
+    } else {
+      // video should have started already - seek to the appropriate point
+      player.seek(-1 * timeToVideoStartMs);
+      setTimeout(function() {
+        player.play();
+      }, 0.5 * MS_IN_SEC);
 
-        setTimeout(function() {
-          // wait a second, then alert the viewer if the video has already ended
-          if (player.isEnded()) {
-            alert('The scheduled video has ended');
-          }
-        }, 1 * MS_IN_SEC);
-      }
-
-    });
+      setTimeout(function() {
+        // wait a second, then alert the viewer if the video has already ended
+        if (player.isEnded()) {
+          alert('The scheduled video has ended');
+        }
+      }, 1 * MS_IN_SEC);
+    }
   }
 
   setTimeout(function() {

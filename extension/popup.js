@@ -56,43 +56,25 @@ function runOnNetflixTab(tab) {
 
         const startTimeOffset = document.getElementById('time-selector-dropdown').value;
 
-        let fetchTimePromise = new Promise((resolve, reject) => {
-          resolve({
-            currentDateTime: (new Date(Date.now())).toUTCString()
+        const targetGMTTs = Date.now() / MS_IN_SEC + parseInt(startTimeOffset);
+
+        document.getElementById('time-selector-dropdown').hidden = true;
+        document.getElementById('selected-start-time-gmt').hidden = false;
+        document.getElementById('selected-start-time-gmt').innerHTML = new Date(targetGMTTs * MS_IN_SEC).toLocaleString() + ' (Your Time Zone)';
+
+        const watchPartyLink = 'https://www.netflix.com/watch/' + trackID + '?syncGMTTimestampSec=' + targetGMTTs
+        document.getElementById('watch-party-link').hidden = false;
+        document.getElementById('watch-party-link').innerHTML = watchPartyLink.replace('https://', '');
+        document.getElementById('watch-party-link').href = watchPartyLink;
+        document.getElementById('watch-party-link').addEventListener('click', () => {
+          chrome.tabs.update({
+            url: watchPartyLink
           });
         });
-
-        if (USE_NETWORK_TIME) {
-          // Get the current time from the web to avoid issues with computers that
-          // have incorrectly set time
-          fetchTimePromise = fetch(GMT_URL)
-            .then((response) => {
-              return response.json();
-            });
-        }
-
-        fetchTimePromise.then((data) => {
-            const startTimeOffset = document.getElementById('time-selector-dropdown').value
-            const targetGMTTs = Date.parse(data.currentDateTime) / MS_IN_SEC + parseInt(startTimeOffset);
-
-            document.getElementById('time-selector-dropdown').hidden = true;
-            document.getElementById('selected-start-time-gmt').hidden = false;
-            document.getElementById('selected-start-time-gmt').innerHTML = new Date(targetGMTTs * MS_IN_SEC).toLocaleString() + ' (Your Time Zone)';
-
-            const watchPartyLink = 'https://www.netflix.com/watch/' + trackID + '?syncGMTTimestampSec=' + targetGMTTs
-            document.getElementById('watch-party-link').hidden = false;
-            document.getElementById('watch-party-link').innerHTML = watchPartyLink.replace('https://','');
-            document.getElementById('watch-party-link').href = watchPartyLink;
-            document.getElementById('watch-party-link').addEventListener('click', () => {
-              chrome.tabs.update({
-                url: watchPartyLink
-              });
-            });
-            document.getElementById('copy-not-on-synced-url').hidden = false;
-            document.getElementById('copy-not-on-synced-url').addEventListener('click', () => {
-              navigator.clipboard.writeText(watchPartyLink);
-            });
-          });
+        document.getElementById('copy-not-on-synced-url').hidden = false;
+        document.getElementById('copy-not-on-synced-url').addEventListener('click', () => {
+          navigator.clipboard.writeText(watchPartyLink);
+        });
       });
     }
   } else {
