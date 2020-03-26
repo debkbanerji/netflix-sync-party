@@ -13,7 +13,7 @@ function embeddedCode() {
   const SYNC_VIDEO_TIMESTAMP_PARAM = 'syncVideoTimestampSec';
   const SYNC_VIDEO_NUM_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_VIDEO_TIMESTAMP_PARAM + "=\\d*");
 
-  const GMT_URL = 'https://worldtimeapi.org/api/timezone/Europe/London';
+  const GMT_URL = 'https://google.com';
 
   function getPlayer() {
     try {
@@ -57,6 +57,7 @@ function embeddedCode() {
     // have incorrectly set time
     fetch(GMT_URL)
       .then((response) => {
+        console.log(response)
         return response.json();
       })
       .then((data) => {
