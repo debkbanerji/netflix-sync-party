@@ -119,3 +119,12 @@ button:active:before {
   padding-top: 120%;
   transition: width .2s ease-out, padding-top .2s ease-out;
 }
+
+
+#watch-party-link {
+  font-size: small;
+}
+
+#extension-link {
+  font-size: small;
+}
