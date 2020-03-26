@@ -13,7 +13,7 @@ function embeddedCode() {
   const SYNC_VIDEO_TIMESTAMP_PARAM = 'syncVideoTimestampSec';
   const SYNC_VIDEO_NUM_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_VIDEO_TIMESTAMP_PARAM + "=\\d*");
 
-  const GMT_URL = 'https://google.com';
+  const GMT_URL = 'http://worldclockapi.com/api/json/gmt/now';
 
   function getPlayer() {
     try {
