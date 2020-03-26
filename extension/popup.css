@@ -39,7 +39,12 @@ a:hover, a:focus {
   color: #3784dc;
 }
 
-text-align: center;
+#warning {
+  padding-top: 10px;
+  color: orange;
+  font-size: small;
+  font-weight: bold;
+}
 
 #scheduled-confirmation-text {
   width: 100%;

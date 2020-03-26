@@ -8,7 +8,7 @@
 
 <body>
 
-  <h1>Watch Party Sync</h1>
+  <h1>Netflix Sync Party</h1>
 
   <div id="synced-video-view">
     <p id="scheduled-confirmation-text">
@@ -16,13 +16,13 @@
         <span id="green-check">&#x2714;</span> Viewing scheduled video
       </span>
     </p>
-    <p>Scheduled watch party start time:
+    <p>Scheduled sync watch party start time:
       <br>
       <b id="scheduled-start-time-gmt">
       </b>
     </p>
 
-    <p>If the video is paused, it will start automatically at the scheduled start time </p>
+    <p>If the video is paused, it will start automatically at the scheduled start time</p>
 
     <button id="resync">&#8634; Resync</button>
     <button id="copy-on-synced-url">Copy video link to clipboard</button>
@@ -46,7 +46,7 @@
 
     <h2>Step 2</h2>
 
-    <p>Select a watch party start time:</p>
+    <p>Select a party start time:</p>
 
     <div id="start-time-select">
       <span>Scheduled start time: &nbsp;</span>
@@ -79,6 +79,10 @@
 
   <div id="non-video-view">
     <p>Start watching a video to use the extension!</p>
+  </div>
+
+  <div>
+    <p id="warning">Make sure you and everyone else in the party has the time on their computer set correctly</p>
   </div>
 
 </body>
