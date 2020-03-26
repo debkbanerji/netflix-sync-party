@@ -1,6 +1,6 @@
 {
   "name": "Netflix Time Sync",
-  "version": "2019.3.23",
+  "version": "2019.3.25",
   "description": "Easily sync the start times of Netflix shows with your friends",
   "permissions": ["declarativeContent", "tabs", "https://google.com/*"],
   "content_scripts": [{
