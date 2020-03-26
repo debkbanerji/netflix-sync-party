@@ -28,4 +28,4 @@ The extension doesn't support video or text chat, since external services almost
 
 ### Why did you make this?
 
-I made this for my friends, since other solutions were kind of unreliable when we tried them, and they wanted something simple and stable that could sync our videos during a call.
+I made this for my friends, since other solutions were kind of unreliable when we tried them, and they wanted something simple and stable that could sync our movies during a call.
