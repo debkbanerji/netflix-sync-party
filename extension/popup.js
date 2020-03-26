@@ -52,6 +52,8 @@ function runOnNetflixTab(tab) {
       let targetGMTTs = null;
 
       document.getElementById('time-selector-dropdown').addEventListener('change', () => {
+        document.getElementById('start-time-select-prompt').hidden = true;
+
         const startTimeOffset = document.getElementById('time-selector-dropdown').value;
 
         let fetchTimePromise = new Promise((resolve, reject) => {
