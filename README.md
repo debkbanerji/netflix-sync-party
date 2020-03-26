@@ -6,8 +6,6 @@ Free and source.
 
 Made with ❤️ by Deb
 
-Doesn't support video or text chat, since external services almost certainly do that better, and you'll almost always have a chat that you use to plan your party anyway.
-
 ## Installation
 
 ### Install the developer version directly from GitHub
@@ -21,3 +19,13 @@ This is useful if you want to mess with the code and add/remove features
 4. Click the **LOAD UNPACKED** button and select the `extension` directory within the release you downloaded.
 
 ![Extensions page](https://developer.chrome.com/static/images/get_started/load_extension.png)
+
+## FAQ
+
+### Do you support chat?
+
+The extension doesn't support video or text chat, since external services almost certainly do that better, and you'll almost always have a chat that you use to plan your party anyway.
+
+### Why did you make this?
+
+I made this for my friends, since other solutions were kind of unreliable when we tried them, and they wanted something simple and stable that could sync our videos during a call.
