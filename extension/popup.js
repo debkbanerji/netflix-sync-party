@@ -36,7 +36,7 @@ function runOnNetflixTab(tab) {
       const timestampGMTMatch = SYNC_GMT_TIMESTAMP_REGEX.exec(url)[0];
       const timestampGMT = parseInt(GMT_TIMESTAMP_REGEX.exec(timestampGMTMatch)[0]) * MS_IN_SEC;
 
-      document.getElementById('scheduled-start-time-gmt').innerHTML = new Date(timestampGMT).toUTCString();;
+      document.getElementById('scheduled-start-time-gmt').innerHTML = new Date(timestampGMT).toLocaleString() + ' (Your Time Zone)';
 
     } else {
       document.getElementById('unsynced-video-view').hidden = false;
@@ -75,7 +75,7 @@ function runOnNetflixTab(tab) {
 
             document.getElementById('time-selector-dropdown').hidden = true;
             document.getElementById('selected-start-time-gmt').hidden = false;
-            document.getElementById('selected-start-time-gmt').innerHTML = new Date(targetGMTTs * MS_IN_SEC).toUTCString();
+            document.getElementById('selected-start-time-gmt').innerHTML = new Date(targetGMTTs * MS_IN_SEC).toLocaleString() + ' (Your Time Zone)';
 
             const watchPartyLink = 'https://www.netflix.com/watch/' + trackID + '?syncGMTTimestampSec=' + targetGMTTs
             document.getElementById('watch-party-link').hidden = false;
