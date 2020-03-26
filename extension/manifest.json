@@ -1,8 +1,8 @@
 {
-  "name": "Netflix Time Sync",
+  "name": "Netflix Sync Party",
   "version": "2019.3.25",
-  "description": "Easily sync the start times of Netflix shows with your friends",
-  "permissions": ["declarativeContent", "tabs", "https://google.com/*"],
+  "description": "Watch Netflix with friends - no lag, no broken video, no nonsense",
+  "permissions": ["declarativeContent", "tabs"],
   "content_scripts": [{
     "matches": ["http://*.netflix.com/*", "https://*.netflix.com/*"],
     "js": ["netflix-page-code.js"]
