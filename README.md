@@ -15,7 +15,7 @@ Doesn't support video or text chat, since external services almost certainly do 
 
 This is useful if you want to mess with the code and add/remove features
 
-1. Download the latest release from the ![releases page](https://github.com/debkbanerji/netflix-sync-extension/releases)
+1. Download the latest release from the [releases page](https://github.com/debkbanerji/netflix-sync-extension/releases)
 2. Open the Extension Management page by navigating to `chrome://extensions`
     * The Extension Management page can also be opened by clicking on the Chrome menu, selecting **Settings** then selecting **Extensions**.
 3. Enable Developer Mode by clicking the toggle switch next to **Developer mode**.
