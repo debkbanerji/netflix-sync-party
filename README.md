@@ -12,11 +12,11 @@ Made with ❤️ by Deb
 
 This is useful if you want to mess with the code and add/remove features
 
-1. Download the latest `extension.zip` from the [releases page](https://github.com/debkbanerji/netflix-sync-extension/releases)
+1. Download and unzip the latest `extension.zip` from the [releases page](https://github.com/debkbanerji/netflix-sync-extension/releases)
 2. Open the Extension Management page within Chrome by navigating to `chrome://extensions`
     * The Extension Management page can also be opened by clicking on the Chrome menu, selecting **Settings** then selecting **Extensions**.
 3. Enable Developer Mode by clicking the toggle switch next to **Developer mode**.
-4. Click the **LOAD UNPACKED** button and select the `extension` directory within the release you downloaded.
+4. Click the **LOAD UNPACKED** button and select the `extension` folder within the release you downloaded.
 
 ![Extensions page](https://developer.chrome.com/static/images/get_started/load_extension.png)
 
