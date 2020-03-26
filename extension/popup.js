@@ -6,6 +6,7 @@ function runOnNetflixTab(tab) {
   const SYNC_GMT_TIMESTAMP_PARAM = 'syncGMTTimestampSec';
   const SYNC_GMT_TIMESTAMP_REGEX = new RegExp('[\\?&]' + SYNC_GMT_TIMESTAMP_PARAM + '=([^&#]*)');
 
+  const USE_NETWORK_TIME = false; // TODO: FIX WITHIN POPUP
   const GMT_URL = 'http://worldclockapi.com/api/json/gmt/now';
   const EXTENSION_LINK = 'https://github.com/debkbanerji/netflix-sync-extension/releases';
 
@@ -53,11 +54,24 @@ function runOnNetflixTab(tab) {
       document.getElementById('time-selector-dropdown').addEventListener('change', () => {
         const startTimeOffset = document.getElementById('time-selector-dropdown').value;
 
-        fetch(GMT_URL)
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
+        console.log('yoa');
+        let fetchTimePromise = new Promise((resolve, reject) => {
+          console.log('yob');
+          resolve({
+            currentDateTime: (new Date(Date.now())).toUTCString()
+          });
+        });
+
+        if (USE_NETWORK_TIME) {
+          // Get the current time from the web to avoid issues with computers that
+          // have incorrectly set time
+          fetchTimePromise = fetch(GMT_URL)
+            .then((response) => {
+              return response.json();
+            });
+        }
+
+        fetchTimePromise.then((data) => {
             const startTimeOffset = document.getElementById('time-selector-dropdown').value
             const targetGMTTs = Date.parse(data.currentDateTime) / MS_IN_SEC + parseInt(startTimeOffset);
 

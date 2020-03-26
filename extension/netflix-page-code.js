@@ -13,6 +13,7 @@ function embeddedCode() {
   const SYNC_VIDEO_TIMESTAMP_PARAM = 'syncVideoTimestampSec';
   const SYNC_VIDEO_NUM_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_VIDEO_TIMESTAMP_PARAM + "=\\d*");
 
+  const USE_NETWORK_TIME = false; // TODO: FIX WITHIN PAGE
   const GMT_URL = 'http://worldclockapi.com/api/json/gmt/now';
 
   function getPlayer() {
@@ -53,41 +54,50 @@ function embeddedCode() {
 
     const player = getPlayer();
 
-    // Get the current time from the web to avoid issues with computers that
-    // have incorrectly set time
-    fetch(GMT_URL)
-      .then((response) => {
-        console.log(response)
-        return response.json();
-      })
-      .then((data) => {
-        const currentGMTTs = Date.parse(data.currentDateTime) / MS_IN_SEC;
-
-        // time between now and when the video should start
-        const timeToVideoStartSec = syncGMTTs - currentGMTTs - syncVideoTargetTs;
-        const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
-
-        if (timeToVideoStartMs > 0) {
-          // video should not start yet - reset and schedule the start
-          player.seek(0);
-          player.pause();
-          setTimeout(function() {
-            player.play();
-          }, timeToVideoStartMs);
-        } else {
-          // video should have started already - seek to the appropriate point
-          player.seek(-1 * timeToVideoStartMs);
-          player.play();
-
-          setTimeout(function() {
-            // wait a second, then alert the viewer if the video has already ended
-            if (player.isEnded()) {
-              alert('The scheduled video has ended');
-            }
-          }, 1 * MS_IN_SEC);
-        }
-
+    let fetchTimePromise = new Promise((resolve, reject) => {
+      resolve({
+        currentDateTime: (new Date(Date.now())).toUTCString()
       });
+    });
+
+    if (USE_NETWORK_TIME) {
+      // Get the current time from the web to avoid issues with computers that
+      // have incorrectly set time
+      fetchTimePromise = fetch(GMT_URL)
+        .then((response) => {
+          console.log(response)
+          return response.json();
+        });
+    }
+
+    fetchTimePromise.then((data) => {
+      const currentGMTTs = Date.parse(data.currentDateTime) / MS_IN_SEC;
+
+      // time between now and when the video should start
+      const timeToVideoStartSec = syncGMTTs - currentGMTTs - syncVideoTargetTs;
+      const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
+
+      if (timeToVideoStartMs > 0) {
+        // video should not start yet - reset and schedule the start
+        player.seek(0);
+        player.pause();
+        setTimeout(function() {
+          player.play();
+        }, timeToVideoStartMs);
+      } else {
+        // video should have started already - seek to the appropriate point
+        player.seek(-1 * timeToVideoStartMs);
+        player.play();
+
+        setTimeout(function() {
+          // wait a second, then alert the viewer if the video has already ended
+          if (player.isEnded()) {
+            alert('The scheduled video has ended');
+          }
+        }, 1 * MS_IN_SEC);
+      }
+
+    });
   }
 
   setTimeout(function() {
