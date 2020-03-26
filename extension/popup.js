@@ -54,9 +54,7 @@ function runOnNetflixTab(tab) {
       document.getElementById('time-selector-dropdown').addEventListener('change', () => {
         const startTimeOffset = document.getElementById('time-selector-dropdown').value;
 
-        console.log('yoa');
         let fetchTimePromise = new Promise((resolve, reject) => {
-          console.log('yob');
           resolve({
             currentDateTime: (new Date(Date.now())).toUTCString()
           });

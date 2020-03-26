@@ -65,7 +65,6 @@ function embeddedCode() {
       // have incorrectly set time
       fetchTimePromise = fetch(GMT_URL)
         .then((response) => {
-          console.log(response)
           return response.json();
         });
     }
