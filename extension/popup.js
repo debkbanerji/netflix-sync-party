@@ -81,7 +81,7 @@ function runOnNetflixTab(tab) {
 
             const watchPartyLink = 'https://www.netflix.com/watch/' + trackID + '?syncGMTTimestampSec=' + targetGMTTs
             document.getElementById('watch-party-link').hidden = false;
-            document.getElementById('watch-party-link').innerHTML = watchPartyLink;
+            document.getElementById('watch-party-link').innerHTML = watchPartyLink.replace('https://','');
             document.getElementById('watch-party-link').href = watchPartyLink;
             document.getElementById('watch-party-link').addEventListener('click', () => {
               chrome.tabs.update({
