@@ -8,7 +8,7 @@ function runOnNetflixTab(tab) {
 
   const USE_NETWORK_TIME = false; // TODO: FIX WITHIN POPUP
   const GMT_URL = 'http://worldclockapi.com/api/json/gmt/now';
-  const EXTENSION_LINK = 'https://github.com/debkbanerji/netflix-sync-extension/releases';
+  const EXTENSION_LINK = 'https://github.com/debkbanerji/netflix-sync-extension';
 
   const MS_IN_SEC = 1000;
 
