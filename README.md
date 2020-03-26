@@ -2,7 +2,7 @@
 Chrome extension to easily let you sync the start times of Netflix shows with your friends.
 
 No ads, no queues, no login, no lag.
-Free and source.
+Free and open source.
 
 Made with ❤️ by Deb
 
