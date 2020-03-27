@@ -42,6 +42,17 @@ function runOnNetflixTab(tab) {
         navigator.clipboard.writeText(url);
       });
 
+
+      // get track ID
+      const trackIDMatch = WATCH_TRACK_REGEX.exec(url)[0];
+      const trackID = TRACK_ID_REGEX.exec(trackIDMatch)[0];
+
+      document.getElementById('leave-party-url').addEventListener('click', () => {
+        chrome.tabs.update({
+          url: 'https://www.netflix.com/watch/' + trackID
+        });
+      });
+
       const timestampGMTMatch = SYNC_GMT_TIMESTAMP_REGEX.exec(url)[0];
       const timestampGMT = parseInt(GMT_TIMESTAMP_REGEX.exec(timestampGMTMatch)[0]) * MS_IN_SEC;
 
