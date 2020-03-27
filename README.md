@@ -8,6 +8,10 @@ Made with ❤️ by Deb and Mihir
 
 ## Installation
 
+### Install from the Chrome Web Store
+
+You can install the extension by visiting [its page on the Chrome Web Store](https://chrome.google.com/webstore/detail/netflix-sync-party/iglgjeoppncgpbbaildpifdnncgbpofl)
+
 ### Install the developer version directly from GitHub
 
 This is useful if you want to mess with the code and add/remove features
