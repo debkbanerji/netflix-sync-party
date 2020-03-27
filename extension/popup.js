@@ -29,6 +29,15 @@ function runOnNetflixTab(tab) {
       //   chrome.tabs.reload(tab.id);
       // });
 
+
+      document.getElementById('watch-party-link-synced').innerHTML = url.replace('https://', '');
+      document.getElementById('watch-party-link-synced').href = url;
+      document.getElementById('watch-party-link-synced').addEventListener('click', () => {
+        chrome.tabs.update({
+          url: url
+        });
+      });
+
       document.getElementById('copy-on-synced-url').addEventListener('click', () => {
         navigator.clipboard.writeText(url);
       });
@@ -63,17 +72,12 @@ function runOnNetflixTab(tab) {
         document.getElementById('selected-start-time-gmt').innerHTML = new Date(targetGMTTs * MS_IN_SEC).toLocaleString() + ' (Your Time Zone)';
 
         const watchPartyLink = 'https://www.netflix.com/watch/' + trackID + '?syncGMTTimestampSec=' + targetGMTTs
-        document.getElementById('watch-party-link').hidden = false;
-        document.getElementById('watch-party-link').innerHTML = watchPartyLink.replace('https://', '');
-        document.getElementById('watch-party-link').href = watchPartyLink;
-        document.getElementById('watch-party-link').addEventListener('click', () => {
-          chrome.tabs.update({
-            url: watchPartyLink
-          });
-        });
         document.getElementById('copy-not-on-synced-url').hidden = false;
         document.getElementById('copy-not-on-synced-url').addEventListener('click', () => {
           navigator.clipboard.writeText(watchPartyLink);
+        });
+        chrome.tabs.update({
+          url: watchPartyLink
         });
       });
     }

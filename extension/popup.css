@@ -125,6 +125,10 @@ button:active:before {
   font-size: small;
 }
 
+#watch-party-link-synced {
+  font-size: small;
+}
+
 #extension-link {
   font-size: small;
 }

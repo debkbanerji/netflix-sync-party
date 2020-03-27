@@ -38,6 +38,30 @@ function embeddedCode() {
     }
   }
 
+  const onSyncFunction = (player, syncGMTTs, syncVideoTargetTs) => {
+
+    const MAX_DESYNC_DELTA = 3 * MS_IN_SEC;
+
+    // recalculate these
+    const currentGMTTs = Date.now() / MS_IN_SEC;
+    // time between now and when the video should start
+    const timeToVideoStartSec = syncGMTTs - currentGMTTs - syncVideoTargetTs;
+    const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
+    const targetPlayerTime = -1 * timeToVideoStartMs;
+
+    const currentPlayerTime = player.getCurrentTime();
+    const delta = Math.abs(targetPlayerTime - currentPlayerTime);
+    if (delta && delta > MAX_DESYNC_DELTA) {
+      // resync
+      player.seek(targetPlayerTime);
+      player.play();
+      // alert the viewer if the video has already ended
+      if (player.isEnded()) {
+        alert('The scheduled video has ended');
+      }
+    }
+  };
+
   function onNetflixLoad() {
 
     const url = window.location.href;
@@ -58,39 +82,22 @@ function embeddedCode() {
     const timeToVideoStartSec = syncGMTTs - currentGMTTs - syncVideoTargetTs;
     const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
 
+    const TIME_TO_SCHEDULE = 3 * MS_IN_SEC;
+    const SYNC_INTERVAL_MS = 3 * MS_IN_SEC;
+
     if (timeToVideoStartMs > 0) {
       // video should not start yet - reset and schedule the start
-      player.seek(0);
-      player.pause();
       setTimeout(function() {
-        player.play();
-      }, timeToVideoStartMs);
-    } else {
-
-      const SYNC_INTERVAL_MS = 3 * MS_IN_SEC;
-      const MAX_DESYNC_DELTA = 3 * MS_IN_SEC;
-
-      setInterval(() => {
-        // recalculate these
-        const currentGMTTs = Date.now() / MS_IN_SEC;
-        // time between now and when the video should start
-        const timeToVideoStartSec = syncGMTTs - currentGMTTs - syncVideoTargetTs;
-        const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
-        const targetPlayerTime = -1 * timeToVideoStartMs;
-
-        const currentPlayerTime = player.getCurrentTime();
-        const delta = Math.abs(targetPlayerTime - currentPlayerTime);
-        if (delta && delta > MAX_DESYNC_DELTA) {
-          // resync
-          player.seek(targetPlayerTime);
+        const player = getPlayer();
+        player.seek(0);
+        player.pause();
+        setTimeout(function() {
           player.play();
-          // alert the viewer if the video has already ended
-          if (player.isEnded()) {
-            alert('The scheduled video has ended');
-            numRetries = 0; // don't try to resync
-          }
-        }
-      }, SYNC_INTERVAL_MS);
+          setInterval(onSyncFunction, SYNC_INTERVAL_MS, player, syncGMTTs, syncVideoTargetTs);
+        }, timeToVideoStartMs - TIME_TO_SCHEDULE);
+      }, TIME_TO_SCHEDULE);
+    } else {
+      setInterval(onSyncFunction, SYNC_INTERVAL_MS, player, syncGMTTs, syncVideoTargetTs);
     }
   }
 
