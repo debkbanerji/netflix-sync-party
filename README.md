@@ -28,7 +28,11 @@ This is useful if you want to mess with the code and add/remove features
 
 ### Do you support chat?
 
-The extension doesn't support video or text chat, since external services almost certainly do that better, and you'll almost always have a chat that you use to plan your party anyway.
+The extension doesn't support video or text chat, since external services almost certainly do that better, and you'll probably have a chat that you use to plan your party anyway.
+
+### Do you support syncing across multiple episodes?
+
+We currently don't support syncing across multiple episodes, but you can easily generate a new link once the new episode starts.
 
 ### Why did you make this?
 
