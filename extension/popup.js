@@ -25,9 +25,9 @@ function runOnNetflixTab(tab) {
     if (SYNC_GMT_TIMESTAMP_REGEX.test(url)) {
       document.getElementById('synced-video-view').hidden = false;
 
-      document.getElementById('resync').addEventListener('click', () => {
-        chrome.tabs.reload(tab.id);
-      });
+      // document.getElementById('resync').addEventListener('click', () => {
+      //   chrome.tabs.reload(tab.id);
+      // });
 
       document.getElementById('copy-on-synced-url').addEventListener('click', () => {
         navigator.clipboard.writeText(url);
