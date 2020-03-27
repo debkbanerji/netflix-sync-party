@@ -4,8 +4,7 @@ function embeddedCode() {
 
   const MS_IN_SEC = 1000;
 
-  const TIME_BEFORE_RUN = 3 * MS_IN_SEC; // Give Netflix this much time to load
-  // TODO: Do this reactively rather than guessing
+  const TIME_BEFORE_RUN = 1.0 * MS_IN_SEC; // Give Netflix this much time to load
 
   const SYNC_GMT_TIMESTAMP_PARAM = 'syncGMTTimestampSec';
   const SYNC_GMT_NUM_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_GMT_TIMESTAMP_PARAM + "=\\d*");
@@ -67,18 +66,31 @@ function embeddedCode() {
         player.play();
       }, timeToVideoStartMs);
     } else {
-      // video should have started already - seek to the appropriate point
-      player.seek(-1 * timeToVideoStartMs);
-      setTimeout(function() {
-        player.play();
-      }, 0.5 * MS_IN_SEC);
 
-      setTimeout(function() {
-        // wait a second, then alert the viewer if the video has already ended
-        if (player.isEnded()) {
-          alert('The scheduled video has ended');
+      const SYNC_INTERVAL_MS = 3 * MS_IN_SEC;
+      const MAX_DESYNC_DELTA = 3 * MS_IN_SEC;
+
+      setInterval(() => {
+        // recalculate these
+        const currentGMTTs = Date.now() / MS_IN_SEC;
+        // time between now and when the video should start
+        const timeToVideoStartSec = syncGMTTs - currentGMTTs - syncVideoTargetTs;
+        const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
+        const targetPlayerTime = -1 * timeToVideoStartMs;
+
+        const currentPlayerTime = player.getCurrentTime();
+        const delta = Math.abs(targetPlayerTime - currentPlayerTime);
+        if (delta && delta > MAX_DESYNC_DELTA) {
+          // resync
+          player.seek(targetPlayerTime);
+          player.play();
+          // alert the viewer if the video has already ended
+          if (player.isEnded()) {
+            alert('The scheduled video has ended');
+            numRetries = 0; // don't try to resync
+          }
         }
-      }, 1 * MS_IN_SEC);
+      }, SYNC_INTERVAL_MS);
     }
   }
 
