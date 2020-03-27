@@ -4,7 +4,7 @@ Chrome extension to easily let you sync the start times of Netflix shows with yo
 No ads, no queues, no login, no lag.
 Free and open source.
 
-Made with ❤️ by Deb
+Made with ❤️ by Deb and Mihir
 
 ## Installation
 
@@ -28,4 +28,4 @@ The extension doesn't support video or text chat, since external services almost
 
 ### Why did you make this?
 
-I made this for my friends, since other solutions were kind of unreliable when we tried them, and they wanted something simple and stable that could sync our movies during a call.
+We made this for our friends, since other solutions were kind of unreliable when we tried them, and they wanted something simple and stable that could sync our movies during a call.
