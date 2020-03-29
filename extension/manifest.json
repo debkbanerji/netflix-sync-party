@@ -1,6 +1,6 @@
 {
   "name": "Netflix Sync Party",
-  "version": "2020.3.27",
+  "version": "2020.3.28",
   "description": "Watch Netflix with friends - no ads, no queues, no login, no lag.",
   "permissions": ["declarativeContent", "tabs"],
   "content_scripts": [{
