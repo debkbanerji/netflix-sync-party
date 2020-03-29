@@ -13,7 +13,21 @@ function embeddedCode() {
   const SYNC_VIDEO_NUM_TIMESTAMP_REGEX = new RegExp("[\\?&]" + SYNC_VIDEO_TIMESTAMP_PARAM + "=\\d*");
 
   const USE_NETWORK_TIME = false; // TODO: FIX WITHIN PAGE
-  const GMT_URL = 'http://worldclockapi.com/api/json/gmt/now';
+  const GMT_URL = 'https://worldtimeapi.org/api/timezone/Europe/London';
+
+  // how far ahead actual time is relative to system time
+  let currentTimeToActualGMTOffset = 0;
+
+  // try to update currentTimeToActualGMTOffset
+  fetch(GMT_URL)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      if (data.unixtime) {
+        currentTimeToActualGMTOffset = data.unixtime - Date.now() / MS_IN_SEC;
+      }
+    });
 
   function getPlayer() {
     try {
@@ -43,7 +57,7 @@ function embeddedCode() {
     const MAX_DESYNC_DELTA = 3 * MS_IN_SEC;
 
     // recalculate these
-    const currentGMTTs = Date.now() / MS_IN_SEC;
+    const currentGMTTs = Date.now() / MS_IN_SEC + currentTimeToActualGMTOffset;
     // time between now and when the video should start
     const timeToVideoStartSec = syncGMTTs - currentGMTTs - syncVideoTargetTs;
     const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
