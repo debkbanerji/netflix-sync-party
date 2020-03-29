@@ -24,7 +24,9 @@ function embeddedCode() {
       return response.json();
     })
     .then((data) => {
-      currentTimeToActualGMTOffset = data.unixtime - Date.now() / MS_IN_SEC;
+      if (data.unixtime) {
+        currentTimeToActualGMTOffset = data.unixtime - Date.now() / MS_IN_SEC;
+      }
     });
 
   function getPlayer() {

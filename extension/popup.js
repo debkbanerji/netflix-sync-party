@@ -7,7 +7,7 @@ function runOnNetflixTab(tab) {
   const SYNC_GMT_TIMESTAMP_REGEX = new RegExp('[\\?&]' + SYNC_GMT_TIMESTAMP_PARAM + '=([^&#]*)');
 
   const USE_NETWORK_TIME = false; // TODO: FIX WITHIN POPUP
-  const GMT_URL = 'http://worldclockapi.com/api/json/gmt/now';
+  const GMT_URL = 'https://worldtimeapi.org/api/timezone/Europe/London';
   const EXTENSION_LINK = 'https://chrome.google.com/webstore/detail/netflix-sync-party/iglgjeoppncgpbbaildpifdnncgbpofl';
 
   const MS_IN_SEC = 1000;
@@ -22,6 +22,22 @@ function runOnNetflixTab(tab) {
   let trackID = null;
 
   if (NETFLIX_WATCH_REGEX.test(url)) {
+
+    // how far ahead actual time is relative to system time
+    let currentTimeToActualGMTOffset = 0;
+
+    // try to update currentTimeToActualGMTOffset
+    fetch(GMT_URL)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data.unixtime) {
+          currentTimeToActualGMTOffset = data.unixtime - Date.now() / MS_IN_SEC;
+        }
+      });
+
+
     if (SYNC_GMT_TIMESTAMP_REGEX.test(url)) {
       document.getElementById('synced-video-view').hidden = false;
 
@@ -76,8 +92,7 @@ function runOnNetflixTab(tab) {
         document.getElementById('start-time-select-prompt').hidden = true;
 
         const startTimeOffset = document.getElementById('time-selector-dropdown').value;
-
-        const targetGMTTs = Date.now() / MS_IN_SEC + parseInt(startTimeOffset);
+        const targetGMTTs = Date.now() / MS_IN_SEC + parseInt(startTimeOffset) + currentTimeToActualGMTOffset;
 
         document.getElementById('time-selector-dropdown').hidden = true;
         document.getElementById('selected-start-time-gmt').hidden = false;
