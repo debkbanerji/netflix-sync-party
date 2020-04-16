@@ -61,7 +61,7 @@ function embeddedCode() {
 
   const onSyncFunction = (player, syncGMTTs, syncVideoTargetTs) => {
     //only sync if video is playing
-    if (getVideoPlayer().isVideoPlayingForSessionId(playerSessionId)) {
+    if (!playerSessionId || getVideoPlayer().isVideoPlayingForSessionId(playerSessionId)) {
       const MAX_DESYNC_DELTA = 3 * MS_IN_SEC;
       
       // recalculate these
