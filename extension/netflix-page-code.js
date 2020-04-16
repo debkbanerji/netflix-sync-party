@@ -18,6 +18,9 @@ function embeddedCode() {
   // how far ahead actual time is relative to system time
   let currentTimeToActualGMTOffset = 0;
 
+  //netflix player session Id
+  let playerSessionId;
+
   // try to update currentTimeToActualGMTOffset
   fetch(GMT_URL)
     .then((response) => {
@@ -28,18 +31,22 @@ function embeddedCode() {
         currentTimeToActualGMTOffset = data.unixtime - Date.now() / MS_IN_SEC;
       }
     });
+  
+  function getVideoPlayer() {
+    return netflix
+      .appContext
+      .state
+      .playerApp
+      .getAPI()
+      .videoPlayer;
+  }
 
   function getPlayer() {
     try {
-      const videoPlayer = netflix
-        .appContext
-        .state
-        .playerApp
-        .getAPI()
-        .videoPlayer;
+      const videoPlayer = getVideoPlayer();
 
       // Getting player id
-      const playerSessionId = videoPlayer
+      playerSessionId = videoPlayer
         .getAllPlayerSessionIds()[0];
 
       const player = videoPlayer
@@ -53,25 +60,27 @@ function embeddedCode() {
   }
 
   const onSyncFunction = (player, syncGMTTs, syncVideoTargetTs) => {
-
-    const MAX_DESYNC_DELTA = 3 * MS_IN_SEC;
-
-    // recalculate these
-    const currentGMTTs = Date.now() / MS_IN_SEC + currentTimeToActualGMTOffset;
-    // time between now and when the video should start
-    const timeToVideoStartSec = syncGMTTs - currentGMTTs - syncVideoTargetTs;
-    const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
-    const targetPlayerTime = -1 * timeToVideoStartMs;
-
-    const currentPlayerTime = player.getCurrentTime();
-    const delta = Math.abs(targetPlayerTime - currentPlayerTime);
-    if (delta && delta > MAX_DESYNC_DELTA) {
-      // resync
-      player.seek(targetPlayerTime);
-      player.play();
-      // alert the viewer if the video has already ended
-      if (player.isEnded()) {
-        alert('The scheduled video has ended');
+    //only sync if video is playing
+    if (!playerSessionId || getVideoPlayer().isVideoPlayingForSessionId(playerSessionId)) {
+      const MAX_DESYNC_DELTA = 3 * MS_IN_SEC;
+      
+      // recalculate these
+      const currentGMTTs = Date.now() / MS_IN_SEC + currentTimeToActualGMTOffset;
+      // time between now and when the video should start
+      const timeToVideoStartSec = syncGMTTs - currentGMTTs - syncVideoTargetTs;
+      const timeToVideoStartMs = timeToVideoStartSec * MS_IN_SEC;
+      const targetPlayerTime = -1 * timeToVideoStartMs;
+      
+      const currentPlayerTime = player.getCurrentTime();
+      const delta = Math.abs(targetPlayerTime - currentPlayerTime);
+      if (delta && delta > MAX_DESYNC_DELTA) {
+        // resync
+        player.seek(targetPlayerTime);
+        player.play();
+        // alert the viewer if the video has already ended
+        if (player.isEnded()) {
+          alert('The scheduled video has ended');
+        }
       }
     }
   };
