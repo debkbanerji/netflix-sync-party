@@ -161,8 +161,8 @@ function embeddedCode() {
         player.pause();
         createCountdownTimer(); //add countdown timer to DOM
         //start countdown
-        let remainingTime = timeToVideoStartMs;
-        setInterval(() => {
+        let remainingTime = timeToVideoStartMs - TIME_TO_SCHEDULE;
+        let updateTimer = setInterval(() => {
           if (document.getElementById(COUNTDOWN_TIMER_DIV_ID).style.visibility === "hidden") {
             document.getElementById(COUNTDOWN_TIMER_DIV_ID).style.visibility = "visible";
           }
@@ -177,6 +177,9 @@ function embeddedCode() {
         }, 1000);
         setTimeout(function() {
           document.getElementById(COUNTDOWN_TIMER_DIV_ID).remove(); //remove timer
+          if (typeof updateTimer !== "undefined") {
+            clearInterval(updateTimer);
+          }
           player.play();
           setInterval(onSyncFunction, SYNC_INTERVAL_MS, player, syncGMTTs, syncVideoTargetTs);
         }, timeToVideoStartMs - TIME_TO_SCHEDULE);
