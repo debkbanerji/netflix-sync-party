@@ -17,9 +17,13 @@ function embeddedCode() {
 
   // how far ahead actual time is relative to system time
   let currentTimeToActualGMTOffset = 0;
-
+  
   //netflix player session Id
   let playerSessionId;
+  
+  /* Countdown timer HTML IDs (these elements are dynamically modified)*/
+  const COUNTDOWN_TIMER_DIV_ID = "countdown-timer-div"; //needs to be removed after party starts
+  const COUNTDOWN_TIMER_H2_ID = "countdown-timer-h2"; //needs to be updated every second till party starts
 
   // try to update currentTimeToActualGMTOffset
   fetch(GMT_URL)
@@ -85,6 +89,46 @@ function embeddedCode() {
     }
   };
 
+  /*
+    Utility method to convert JSON holding CSS attributes to string
+  */
+  function createStyleString(cssObj) {
+    return JSON.stringify(cssObj)
+    .split(",").join(";")
+    .split("\"").join("")
+    .slice(1, -1);
+  }
+
+  function createCountdownTimer() {
+    //styling for the countdown timer div
+    let divCss = { 
+        "position":"absolute",
+        "margin-top": "10px",
+        "left":"50%",
+        "transform": "translateX(-50%)",
+        "color":"white",
+        "z-index":"9999999",
+        "background-color": "black",
+        "border-radius":"10px",
+        "border":"red",
+        "border-style":"solid",
+        "text-align":"center",
+        "padding-left": ".83em",
+        "padding-right": ".83em",
+    };
+    let div = document.createElement("div");
+    let h2 = document.createElement("h2"); // remaining time
+    let h3 = document.createElement("h4"); // message
+    h2.innerText = "00:00";
+    h2.id = COUNTDOWN_TIMER_H2_ID;
+    h3.innerText = "till your Netflix Sync Party starts";
+    div.appendChild(h2);
+    div.appendChild(h3);
+    div.id = COUNTDOWN_TIMER_DIV_ID;
+    div.style = createStyleString(divCss);
+    document.getElementsByTagName('body').item(0).appendChild(div);
+  }
+
   function onNetflixLoad() {
 
     const url = window.location.href;
@@ -107,14 +151,28 @@ function embeddedCode() {
 
     const TIME_TO_SCHEDULE = 3 * MS_IN_SEC;
     const SYNC_INTERVAL_MS = 3 * MS_IN_SEC;
-
+    
     if (timeToVideoStartMs > 0) {
       // video should not start yet - reset and schedule the start
       setTimeout(function() {
         const player = getPlayer();
         player.seek(0);
         player.pause();
+        createCountdownTimer(); //add countdown timer to DOM
+        //start countdown
+        let remainingTime = timeToVideoStartMs;
+        setInterval(() => {
+          //update timer
+          remainingTime -= MS_IN_SEC;
+          let min = Math.floor(remainingTime / (1000 * 60));
+          let sec = Math.floor(remainingTime / (1000)) % 60;
+          min = (min < 10) ? "0" + min : min;
+          sec = (sec < 10) ? "0" + sec : sec;
+          let countdownStr = min.toString() + ":" + sec.toString();
+          document.getElementById(COUNTDOWN_TIMER_H2_ID).innerText = countdownStr;
+        }, 1000);
         setTimeout(function() {
+          document.getElementById(COUNTDOWN_TIMER_DIV_ID).remove(); //remove timer
           player.play();
           setInterval(onSyncFunction, SYNC_INTERVAL_MS, player, syncGMTTs, syncVideoTargetTs);
         }, timeToVideoStartMs - TIME_TO_SCHEDULE);
