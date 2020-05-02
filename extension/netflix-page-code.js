@@ -115,6 +115,7 @@ function embeddedCode() {
         "text-align":"center",
         "padding-left": ".83em",
         "padding-right": ".83em",
+        "visibility": "hidden",
     };
     let div = document.createElement("div"); // enclosing countdown timer div
     let h2 = document.createElement("h2"); // remaining time text
@@ -162,6 +163,9 @@ function embeddedCode() {
         //start countdown
         let remainingTime = timeToVideoStartMs;
         setInterval(() => {
+          if (document.getElementById(COUNTDOWN_TIMER_DIV_ID).style.visibility === "hidden") {
+            document.getElementById(COUNTDOWN_TIMER_DIV_ID).style.visibility = "visible";
+          }
           //update timer
           remainingTime -= MS_IN_SEC;
           let min = Math.floor(remainingTime / (1000 * 60));
