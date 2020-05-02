@@ -22,9 +22,9 @@ function embeddedCode() {
   let playerSessionId;
   
   /* Countdown timer HTML IDs (these elements are dynamically modified)*/
-  const COUNTDOWN_TIMER_DIV_ID = "countdown-timer-div"; //needs to be removed after party starts
-  const COUNTDOWN_TIMER_H2_ID = "countdown-timer-h2"; //needs to be updated every second till party starts
-
+  const COUNTDOWN_TIMER_DIV_ID = "countdown-timer-div"; //removed after party starts
+  const COUNTDOWN_TIMER_H2_ID = "countdown-timer-h2"; //updated every second till party starts
+  
   // try to update currentTimeToActualGMTOffset
   fetch(GMT_URL)
     .then((response) => {
@@ -116,8 +116,8 @@ function embeddedCode() {
         "padding-left": ".83em",
         "padding-right": ".83em",
     };
-    let div = document.createElement("div");
-    let h2 = document.createElement("h2"); // remaining time
+    let div = document.createElement("div"); // enclosing countdown timer div
+    let h2 = document.createElement("h2"); // remaining time text
     let h3 = document.createElement("h4"); // message
     h2.innerText = "00:00";
     h2.id = COUNTDOWN_TIMER_H2_ID;
