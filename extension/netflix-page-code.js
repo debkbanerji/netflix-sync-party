@@ -31,7 +31,9 @@ function embeddedCode() {
 
     let timerInserted = false;
     
-    const NETFLIX_MOUNT_CLASS = "sizing-wrapper"; //netflix HTML element class where counter will be inserted
+    // Netflix HTML element class where custom elements will be inserted
+    // Adding within this <div> ensures the children are visible in fullscreen mode, and Netflix font's are inherited
+    const NETFLIX_MOUNT_CLASS = "sizing-wrapper"; 
 
     // try to update currentTimeToActualGMTOffset
     fetch(GMT_URL)
