@@ -29,6 +29,10 @@ function embeddedCode() {
     const COUNTDOWN_TIMER_DIV_ID = "countdown-timer-div"; //removed after party starts
     const COUNTDOWN_TIMER_H2_ID = "countdown-timer-h2"; //updated every second till party starts
 
+    let timerInserted = false;
+    
+    const NETFLIX_MOUNT_CLASS = "sizing-wrapper"; //netflix HTML element class where counter will be inserted
+
     // try to update currentTimeToActualGMTOffset
     fetch(GMT_URL)
         .then(response => {
@@ -110,9 +114,9 @@ function embeddedCode() {
         // styling for the countdown timer div
         let divCss = {
             position: "absolute",
-            "margin-top": "10px",
+            "margin-top": "40px",
             left: "50%",
-            transform: "translateX(-50%)",
+            transform: "translateX(-50%) scale(2)",
             color: "white",
             "z-index": "9999999",
             "background-color": "black",
@@ -134,10 +138,16 @@ function embeddedCode() {
         div.appendChild(h3);
         div.id = COUNTDOWN_TIMER_DIV_ID;
         div.style = createStyleString(divCss);
-        document
-            .getElementsByTagName("body")
-            .item(0)
-            .appendChild(div);
+        try {
+            document
+                .getElementsByClassName(NETFLIX_MOUNT_CLASS)
+                .item(0)
+                .appendChild(div);
+            timerInserted = true;
+        } catch (err) {
+            console.error("Unable to add countdown timer to DOM. NETFLIX_MOUNT_CLASS:" + NETFLIX_MOUNT_CLASS);
+            console.error(err);
+        }
     }
 
     function onNetflixLoad() {
@@ -174,32 +184,38 @@ function embeddedCode() {
                 player.seek(0);
                 player.pause();
                 createCountdownTimer(); //add countdown timer to DOM
-                //start countdown
-                let remainingTime = timeToVideoStartMs - TIME_TO_SCHEDULE;
-                let updateTimer = setInterval(() => {
-                    if (
-                        document.getElementById(COUNTDOWN_TIMER_DIV_ID).style
-                            .visibility === "hidden"
-                    ) {
+                if (timerInserted) {
+                    //start countdown
+                    let remainingTime = timeToVideoStartMs - TIME_TO_SCHEDULE;
+                    var updateTimer = setInterval(() => {
+                        if (
+                            document.getElementById(COUNTDOWN_TIMER_DIV_ID).style
+                                .visibility === "hidden"
+                        ) {
+                            document.getElementById(
+                                COUNTDOWN_TIMER_DIV_ID
+                            ).style.visibility = "visible";
+                        }
+                        //update timer
+                        remainingTime -= MS_IN_SEC;
+                        let min = Math.floor(remainingTime / (1000 * 60));
+                        let sec = Math.floor(remainingTime / 1000) % 60;
+                        min = min < 10 ? "0" + min : min;
+                        sec = sec < 10 ? "0" + sec : sec;
+                        let countdownStr = min.toString() + ":" + sec.toString();
                         document.getElementById(
-                            COUNTDOWN_TIMER_DIV_ID
-                        ).style.visibility = "visible";
-                    }
-                    //update timer
-                    remainingTime -= MS_IN_SEC;
-                    let min = Math.floor(remainingTime / (1000 * 60));
-                    let sec = Math.floor(remainingTime / 1000) % 60;
-                    min = min < 10 ? "0" + min : min;
-                    sec = sec < 10 ? "0" + sec : sec;
-                    let countdownStr = min.toString() + ":" + sec.toString();
-                    document.getElementById(
-                        COUNTDOWN_TIMER_H2_ID
-                    ).innerText = countdownStr;
-                }, 1000);
+                            COUNTDOWN_TIMER_H2_ID
+                        ).innerText = countdownStr;
+                    }, 1000);
+                }
                 setTimeout(function() {
-                    document.getElementById(COUNTDOWN_TIMER_DIV_ID).remove(); //remove timer
-                    if (typeof updateTimer !== "undefined") {
-                        clearInterval(updateTimer);
+                    if (timerInserted) {
+                        //remove timer, end countdown
+                        document.getElementById(COUNTDOWN_TIMER_DIV_ID).remove(); //remove timer
+                        timerInserted = false;
+                        if (typeof updateTimer !== "undefined") {
+                            clearInterval(updateTimer);
+                        }
                     }
                     player.play();
                     setInterval(
