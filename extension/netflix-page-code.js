@@ -103,7 +103,7 @@ function embeddedCode() {
                 // resync
                 player.seek(targetPlayerTime);
                 player.play();
-                flashNotif("Syncing...", 1750, false);
+                flashNotif("Syncing...", 1750, true);
                 // alert the viewer if the video has already ended
                 if (player.isEnded()) {
                     alert("The scheduled video has ended");
@@ -204,7 +204,7 @@ function embeddedCode() {
         // add sync (refresh) icon from Font Awesome
         i.setAttribute("class", "fa fa-refresh fa-spin fa-2x fa-fw");
         i.id = NOTIF_I_ID;
-        
+
         let span = document.createElement("span");
         span.appendChild(i); //add icon
         span.appendChild(p); //add message
