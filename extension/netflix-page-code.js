@@ -34,13 +34,21 @@ function embeddedCode() {
     /* Notification div ID */
     const NOTIF_DIV_ID = "notif-div";   //container div 
     const NOTIF_P_ID = "notif-message"; //where the message text is stored
+    const NOTIF_I_ID = "notif-icon" //spinning refresh icon
 
     // Netflix HTML element class where custom elements will be inserted
     // Adding within this <div> ensures the children are visible in fullscreen mode, and Netflix font's are inherited
     const NETFLIX_MOUNT_CLASS = "sizing-wrapper"; 
 
     // try to update currentTimeToActualGMTOffset
-    fetch(GMT_URL)
+    let headers = new Headers();
+    // headers.append('Content-Type', 'application/json');
+    // headers.append('Accept', 'application/json');
+    // headers.append('Origin','https://www.netflix.com');
+    // headers.append('Access-Control-Allow-Origin', 'https://www.netflix.com');
+    // headers.append('Access-Control-Allow-Methods', 'GET');
+    // headers.append('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    fetch(GMT_URL, {mode: 'cors', method: 'GET', credentials: 'include', headers: headers})
         .then(response => {
             return response.json();
         })
@@ -95,7 +103,7 @@ function embeddedCode() {
                 // resync
                 player.seek(targetPlayerTime);
                 player.play();
-                flashNotif("Syncing...", 2000);
+                flashNotif("Syncing...", 1750, false);
                 // alert the viewer if the video has already ended
                 if (player.isEnded()) {
                     alert("The scheduled video has ended");
@@ -161,14 +169,9 @@ function embeddedCode() {
             position: "absolute",
             "margin-top": "15px",
             left: "50%",
-            transform: "translateX(-50%) scale(2)",
+            transform: "translateX(-50%) scale(1)",
             color: "white",
             "z-index": "9999999",
-            // "background-color": "black",
-            // border: "none",
-            // "border-style": "ridge",
-            // "border-radius": "2px",
-            // "border-width": "1px",
             "text-align": "center",
             "padding-left": ".5em",
             "padding-right": ".5em",
@@ -180,17 +183,36 @@ function embeddedCode() {
         let pCss = {
             "margin-block-start": ".3em",
             "margin-block-end": ".3em",
+            "margin-left": ".3em",
+            "margin-right":".3em",
+            "font-size": "2.2em",
+            "display": "inline",
         }
         let div = document.createElement("div");
         let p = document.createElement("p");
-        
+        let i = document.createElement("i");
+
         p.id = NOTIF_P_ID;
         p.innerText = "Syncing...";
-        p.style = createStyleString(pCss);        
+        p.style = createStyleString(pCss);
+
+        // add Font Awesome to head element
+        let fontAwesome = document.createElement("link");
+        fontAwesome.setAttribute("rel", "stylesheet");
+        fontAwesome.setAttribute("href", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+        document.getElementsByTagName("head")[0].appendChild(fontAwesome); 
+        // add sync (refresh) icon from Font Awesome
+        i.setAttribute("class", "fa fa-refresh fa-spin fa-2x fa-fw");
+        i.id = NOTIF_I_ID;
         
+        let span = document.createElement("span");
+        span.appendChild(i); //add icon
+        span.appendChild(p); //add message
+
         div.id = NOTIF_DIV_ID;
         div.style = createStyleString(divCss);
-        div.appendChild(p);
+        div.appendChild(i);
+        div.appendChild(span);
         try {
             document
                 .getElementsByClassName(NETFLIX_MOUNT_CLASS)
@@ -202,11 +224,12 @@ function embeddedCode() {
         }
     }
 
-    function flashNotif(message, timeInMs) {
+    function flashNotif(message, timeInMs, showIcon) {
         /* flashes a notification in NOTIF_DIV_ID */
         try {
             document.getElementById(NOTIF_P_ID).innerText = message;
             document.getElementById(NOTIF_DIV_ID).style.opacity = 1;
+            document.getElementById(NOTIF_I_ID).style.visibility = (showIcon) ? "visible" : "hidden";
             setTimeout(()=>{document.getElementById(NOTIF_DIV_ID).style.opacity = 0;}, timeInMs);
         } catch (err) {
             console.error("unable to flash notification");
