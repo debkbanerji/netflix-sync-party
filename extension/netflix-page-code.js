@@ -30,7 +30,11 @@ function embeddedCode() {
     const COUNTDOWN_TIMER_H2_ID = "countdown-timer-h2"; //updated every second till party starts
 
     let timerInserted = false;
-    
+
+    /* Notification div ID */
+    const NOTIF_DIV_ID = "notif-div";   //container div 
+    const NOTIF_P_ID = "notif-message"; //where the message text is stored
+
     // Netflix HTML element class where custom elements will be inserted
     // Adding within this <div> ensures the children are visible in fullscreen mode, and Netflix font's are inherited
     const NETFLIX_MOUNT_CLASS = "sizing-wrapper"; 
@@ -73,8 +77,7 @@ function embeddedCode() {
         // only sync if video is playing
         if (
             !playerSessionId ||
-            getVideoPlayer().isVideoPlayingForSessionId(playerSessionId)
-        ) {
+            getVideoPlayer().isVideoPlayingForSessionId(playerSessionId)) {
             const MAX_DESYNC_DELTA = 3 * MS_IN_SEC;
 
             // recalculate these
@@ -92,6 +95,7 @@ function embeddedCode() {
                 // resync
                 player.seek(targetPlayerTime);
                 player.play();
+                flashNotif("Syncing...", 2000);
                 // alert the viewer if the video has already ended
                 if (player.isEnded()) {
                     alert("The scheduled video has ended");
@@ -152,7 +156,67 @@ function embeddedCode() {
         }
     }
 
+    function createNotifDiv() {
+        let divCss = {
+            position: "absolute",
+            "margin-top": "15px",
+            left: "50%",
+            transform: "translateX(-50%) scale(2)",
+            color: "white",
+            "z-index": "9999999",
+            // "background-color": "black",
+            // border: "none",
+            // "border-style": "ridge",
+            // "border-radius": "2px",
+            // "border-width": "1px",
+            "text-align": "center",
+            "padding-left": ".5em",
+            "padding-right": ".5em",
+            // "box-shadow": "0px 0px 3px red",
+            transition: "opacity .5s",
+            visibility: "visible",
+            opacity: "0",
+        };
+        let pCss = {
+            "margin-block-start": ".3em",
+            "margin-block-end": ".3em",
+        }
+        let div = document.createElement("div");
+        let p = document.createElement("p");
+        
+        p.id = NOTIF_P_ID;
+        p.innerText = "Syncing...";
+        p.style = createStyleString(pCss);        
+        
+        div.id = NOTIF_DIV_ID;
+        div.style = createStyleString(divCss);
+        div.appendChild(p);
+        try {
+            document
+                .getElementsByClassName(NETFLIX_MOUNT_CLASS)
+                .item(0)
+                .appendChild(div);
+        } catch (err) {
+            console.error("Unable to add " + NOTIF_DIV_ID + " to DOM. NETFLIX_MOUNT_CLASS:" + NETFLIX_MOUNT_CLASS);
+            console.error(err);
+        }
+    }
+
+    function flashNotif(message, timeInMs) {
+        /* flashes a notification in NOTIF_DIV_ID */
+        try {
+            document.getElementById(NOTIF_P_ID).innerText = message;
+            document.getElementById(NOTIF_DIV_ID).style.opacity = 1;
+            setTimeout(()=>{document.getElementById(NOTIF_DIV_ID).style.opacity = 0;}, timeInMs);
+        } catch (err) {
+            console.error("unable to flash notification");
+            console.error(err);
+        }
+    }
+
     function onNetflixLoad() {
+        createNotifDiv();
+
         const url = window.location.href;
         const syncGMTTs = parseInt(
             SYNC_GMT_NUM_TIMESTAMP_REGEX.exec(url)[0].split("=")[1]
