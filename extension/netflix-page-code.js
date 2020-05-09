@@ -26,15 +26,15 @@ function embeddedCode() {
     let playerSessionId;
 
     /* Countdown timer HTML IDs (these elements are dynamically modified)*/
-    const COUNTDOWN_TIMER_DIV_ID = "countdown-timer-div"; //removed after party starts
-    const COUNTDOWN_TIMER_H2_ID = "countdown-timer-h2"; //updated every second till party starts
+    const COUNTDOWN_TIMER_DIV_ID = "countdown-timer-div"; // removed after party starts
+    const COUNTDOWN_TIMER_H2_ID = "countdown-timer-h2"; // updated every second until party starts
 
     let timerInserted = false;
 
     /* Notification div ID */
-    const NOTIF_DIV_ID = "notif-div";   //container div 
-    const NOTIF_P_ID = "notif-message"; //where the message text is stored
-    const NOTIF_I_ID = "notif-icon" //spinning refresh icon
+    const NOTIF_DIV_ID = "notif-div";   // container div 
+    const NOTIF_P_ID = "notif-message"; // where the message text is stored
+    const NOTIF_I_ID = "notif-icon" // spinning refresh icon
 
     // Netflix HTML element class where custom elements will be inserted
     // Adding within this <div> ensures the children are visible in fullscreen mode, and Netflix font's are inherited
@@ -147,7 +147,7 @@ function embeddedCode() {
         let h3 = document.createElement("h4"); // message
         h2.innerText = "00:00";
         h2.id = COUNTDOWN_TIMER_H2_ID;
-        h3.innerText = "till your Netflix Sync Party starts";
+        h3.innerText = "Until your Netflix Sync Party starts";
         div.appendChild(h2);
         div.appendChild(h3);
         div.id = COUNTDOWN_TIMER_DIV_ID;
