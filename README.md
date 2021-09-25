@@ -1,4 +1,6 @@
 # Netflix Sync Party
+[**Get it from the Chrome Web Store**](https://chrome.google.com/webstore/detail/netflix-sync-party/iglgjeoppncgpbbaildpifdnncgbpofl)
+
 Chrome extension to easily let you sync the start times of Netflix shows with your friends.
 
 No ads, no queues, no login, no lag.
