@@ -32,13 +32,13 @@ function embeddedCode() {
     let timerInserted = false;
 
     /* Notification div ID */
-    const NOTIF_DIV_ID = "notif-div";   // container div 
+    const NOTIF_DIV_ID = "notif-div";   // container div
     const NOTIF_P_ID = "notif-message"; // where the message text is stored
     const NOTIF_I_ID = "notif-icon" // spinning refresh icon
 
     // Netflix HTML element class where custom elements will be inserted
     // Adding within this <div> ensures the children are visible in fullscreen mode, and Netflix font's are inherited
-    const NETFLIX_MOUNT_CLASS = "sizing-wrapper"; 
+    const NETFLIX_MOUNT_CLASS = "watch-video"; 
 
     // try to update currentTimeToActualGMTOffset
     let headers = new Headers();
@@ -200,7 +200,7 @@ function embeddedCode() {
         let fontAwesome = document.createElement("link");
         fontAwesome.setAttribute("rel", "stylesheet");
         fontAwesome.setAttribute("href", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
-        document.getElementsByTagName("head")[0].appendChild(fontAwesome); 
+        document.getElementsByTagName("head")[0].appendChild(fontAwesome);
         // add sync (refresh) icon from Font Awesome
         i.setAttribute("class", "fa fa-refresh fa-spin fa-2x fa-fw");
         i.id = NOTIF_I_ID;
